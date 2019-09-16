@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">system_stats</string>
+    <string name="NEW">Add a new sub-admin:\n(Password is \"123456"\" by default.)</string>
+</resources>
