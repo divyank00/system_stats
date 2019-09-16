@@ -22,7 +22,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
@@ -30,7 +29,7 @@ import java.util.Map;
 
 public class LoginActivity extends Activity {
 
-    private EditText mail, passwd, mail2, passwd2;
+    private EditText mail, passwd, mail2, passwd2, name2, labNo2;
     private FloatingActionButton submit, submit2;
 
     private FirebaseAuth mAuth;
@@ -43,9 +42,7 @@ public class LoginActivity extends Activity {
 
     private ProgressDialog loginProgress, mProgress;
 
-    private String loginmail, loginpass, User_Id;
-
-    private int z = 0;
+    private String loginmail, loginpass, name, lab_no, User_Id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +145,8 @@ public class LoginActivity extends Activity {
             mail2 = findViewById(R.id.eT_mail2);
             passwd2 = findViewById(R.id.eT_passwd2);
             submit2 = findViewById(R.id.btn_submit2);
+            name2 = findViewById(R.id.eT_name2);
+            labNo2 = findViewById(R.id.eT_lab_no2);
 
             if (mail_intent != null && password_intent != null && toast_intent != null) {
                 mail.setText(mail_intent);
@@ -239,6 +238,9 @@ public class LoginActivity extends Activity {
                 public void onClick(View view) {
                     loginmail = mail2.getText().toString().trim();
                     loginpass = passwd2.getText().toString().trim();
+                    name = name2.getText().toString().trim();
+                    lab_no = labNo2.getText().toString().trim();
+
                     if (loginmail.isEmpty())
                         mail2.setError("Mandatory field.");
                     if (loginpass.isEmpty())
@@ -264,17 +266,40 @@ public class LoginActivity extends Activity {
                                             Map<String, Object> data = new HashMap<>();
                                             data.put("Admin", Boolean.FALSE);
                                             data.put("Verified", Boolean.FALSE);
-                                            Sub_Admins.document(User_Id).set(data);
-                                            Admins.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                                @Override
-                                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
+                                            data.put("Name", name);
+                                            data.put("Lab No.", lab_no);
+                                            Sub_Admins.document(User_Id).set(data)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            Map<String, Object> data2 = new HashMap<>();
+                                                            data2.put("E-mail", loginmail);
+                                                            data2.put("Name", name);
+                                                            data2.put("Lab No.", lab_no);
+                                                            data2.put("Access given", Boolean.FALSE);
+                                                            Admins.document(User_Id).set(data2)
+                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                        @Override
+                                                                        public void onSuccess(Void aVoid) {
+                                                                            sendMailVerification(mUser);
+                                                                            Toast.makeText(LoginActivity.this, "Please verify your mail and wait for the admin to give you access.", Toast.LENGTH_LONG).show();
+                                                                        }
+                                                                    })
+                                                                    .addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+                                                                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    });
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                             loginProgress.dismiss();
-//                                            Intent intent = new Intent(LoginActivity.this, Sub_Admin.class);
-//                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                            startActivity(intent);
                                         }
                                     }
                                 });
@@ -282,6 +307,21 @@ public class LoginActivity extends Activity {
                 }
             });
         }
+    }
+
+    private void sendMailVerification(FirebaseUser mUser) {
+        mUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    loginProgress.dismiss();
+                } else {
+                    mAuth.signOut();
+                    loginProgress.dismiss();
+                }
+            }
+        });
     }
 
     @Override

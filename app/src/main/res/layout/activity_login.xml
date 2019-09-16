@@ -7,6 +7,14 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
     <TextView
         android:id="@+id/tV1"
         android:layout_width="match_parent"
@@ -72,6 +80,30 @@
         android:hint="E-Mail"
         android:inputType="textEmailAddress" />
 
+            <EditText
+                android:id="@+id/eT_name2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:ems="10"
+                android:hint="Full Name"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/eT_lab_no2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:ems="10"
+                android:hint="Lab No."
+                android:inputType="textEmailAddress" />
+
     <EditText
         android:id="@+id/eT_passwd2"
         android:layout_width="match_parent"
@@ -94,5 +126,6 @@
         android:layout_marginBottom="8dp"
         android:backgroundTint="#5C00FD"
         app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
-
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
