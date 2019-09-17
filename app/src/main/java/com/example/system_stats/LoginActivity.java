@@ -287,6 +287,7 @@ public class LoginActivity extends Activity {
                                                                             passwd2.getText().clear();
                                                                             name2.getText().clear();
                                                                             labNo2.getText().clear();
+                                                                            loginProgress.dismiss();
                                                                             Toast.makeText(LoginActivity.this, "Please verify your mail and wait for the admin to give you access.", Toast.LENGTH_LONG).show();
                                                                         }
                                                                     })
@@ -297,6 +298,7 @@ public class LoginActivity extends Activity {
                                                                             passwd2.getText().clear();
                                                                             name2.getText().clear();
                                                                             labNo2.getText().clear();
+                                                                            loginProgress.dismiss();
                                                                             Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                                                         }
                                                                     });
@@ -312,7 +314,6 @@ public class LoginActivity extends Activity {
 //                                                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 //                                                }
 //                                            });
-                                            loginProgress.dismiss();
                                         }
                                     }
                                 });

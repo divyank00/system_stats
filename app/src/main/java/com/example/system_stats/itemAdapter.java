@@ -1,13 +1,9 @@
 package com.example.system_stats;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,11 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class itemAdapter extends FirestoreRecyclerAdapter<model_class, itemAdapter.itemHolder> {
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference Admins = db.collection("Admins");
+    private OnItemClickListener listener;
 
     public itemAdapter(@NonNull FirestoreRecyclerOptions<model_class> options) {
         super(options);
@@ -44,40 +43,55 @@ public class itemAdapter extends FirestoreRecyclerAdapter<model_class, itemAdapt
 
     class itemHolder extends RecyclerView.ViewHolder {
 
-        TextView name, mail, labNo;
-        CheckBox yes, no;
+        private TextView name, mail, labNo;
+        private RadioButton yes, no;
 
-        public itemHolder(@NonNull View itemView) {
+        public itemHolder(@NonNull final View itemView) {
             super(itemView);
-
             name = itemView.findViewById(R.id.name);
             mail = itemView.findViewById(R.id.mail);
             labNo = itemView.findViewById(R.id.lab_no);
             yes = itemView.findViewById(R.id.yes);
             no = itemView.findViewById(R.id.no);
 
-            final AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
-            builder.setMessage("Do you wish to confirm.")
-                    .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Admins.document("Sub-Admins").collection("Sub-Admins").document()
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    })
-                    .setCancelable(false);
-            if (yes.isChecked()) {
-                no.setChecked(false);
-            }
-            else if(no.isChecked()){
-                yes.setChecked(false);
-            }
-
+            yes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position=getAdapterPosition();
+                    if(position!=RecyclerView.NO_POSITION && listener!=null){
+                        listener.onYesClick(getSnapshots().getSnapshot(position),position);
+                        yes.setChecked(false);
+                    }
+                }
+            });
+            no.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position=getAdapterPosition();
+                    if(position!=RecyclerView.NO_POSITION && listener!=null){
+                        listener.onNoClick(getSnapshots().getSnapshot(position),position);
+                        no.setChecked(false);
+                    }
+                }
+            });
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    int position=getAdapterPosition();
+//                    if(position!=RecyclerView.NO_POSITION && listener!=null){
+//                        listener.onItemClick(getSnapshots().getSnapshot(position),position);
+//                    }
+//                }
+//            });
         }
+    }
+
+    public interface OnItemClickListener{
+        void onYesClick(DocumentSnapshot documentSnapshot, int position);
+        void onNoClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnItemClickLIstener(OnItemClickListener listener){
+        this.listener=listener;
     }
 }
