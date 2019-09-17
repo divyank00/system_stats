@@ -1,30 +1,22 @@
 package com.example.system_stats;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.AuthResult;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.google.firebase.firestore.Query;
 
 public class Admin extends AppCompatActivity {
 
@@ -34,21 +26,18 @@ public class Admin extends AppCompatActivity {
     private CollectionReference Admins = db.collection("Admins");
     private CollectionReference Sub_Admins = db.collection("Sub_Admins");
 
+    private RecyclerView recyclerView;
+    private itemAdapter itemAdapter;
+
     private String User_Id;
-
-    private ProgressDialog mProgress, loginProgress;
-
-//    private EditText mail;
-
-//    private FloatingActionButton submit;
 
     private Button log_out;
 
-    private String loginmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_admin);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -60,17 +49,28 @@ public class Admin extends AppCompatActivity {
             startActivity(intent);
         }
 
-        setContentView(R.layout.activity_admin);
 
         Toast.makeText(this, "Logged in as " + mUser.getEmail(), Toast.LENGTH_SHORT).show();
 
-//        User_Id = mUser.getUid();
+        CollectionReference requests = Admins.document("Sub-Admins").collection("Sub-Admins");
 
-//        mail = findViewById(R.id.eT_mail);
+        Query query = requests.whereEqualTo("access_given","pending");
 
-//        submit = findViewById(R.id.btn_submit);
+        FirestoreRecyclerOptions<model_class> firebaseRecyclerAdapter = new FirestoreRecyclerOptions.Builder<model_class>()
+                .setQuery(query, model_class.class)
+                .build();
+
+        itemAdapter = new itemAdapter(firebaseRecyclerAdapter);
 
         log_out = findViewById(R.id.log_out);
+        recyclerView = findViewById(R.id.rV);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(itemAdapter);
 
         log_out.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,44 +82,18 @@ public class Admin extends AppCompatActivity {
             }
         });
 
-//        submit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                loginmail = mail.getText().toString().trim();
-//                if (loginmail.isEmpty())
-//                    mail.setError("Mandatory field.");
-//                else {
-//                    final FirebaseAuth mAuth2 = FirebaseAuth.getInstance();
-//                    loginProgress.setMessage("Signing Up...");
-//                    loginProgress.show();
-//                    mAuth2.createUserWithEmailAndPassword(loginmail, "123456")
-//                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<AuthResult> task) {
-//                                    if (!task.isSuccessful()) {
-//                                        mAuth2.signOut();
-//                                        String errorMessage = task.getException().getMessage();
-//                                        Toast.makeText(Admin.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
-//                                        mail.getText().clear();
-//                                        loginProgress.dismiss();
-//                                    } else {
-//                                        mUser2 = mAuth2.getCurrentUser();
-//                                        if (mUser2 != null)
-//                                            User_Id2 = mUser2.getUid();
-//                                        mAuth2.signOut();
-//
-//                                        Map<String, Object> data = new HashMap<>();
-//                                        data.put("Type", "Sub-Admin");
-//                                        data.put("Appointed by", mUser.getEmail());
-//                                        Sub_Admins.document(User_Id2).set(data);
-//                                        loginProgress.dismiss();
-////                                        Toast.makeText(Admin.this, "User added as Sub-Admin!", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }
-//                            });
-//                }
-//            }
-//        });
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        itemAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        itemAdapter.stopListening();
+        super.onStop();
+    }
+
 
 }

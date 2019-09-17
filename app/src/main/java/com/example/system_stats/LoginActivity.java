@@ -258,47 +258,60 @@ public class LoginActivity extends Activity {
                                             Toast.makeText(LoginActivity.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
                                             mail2.getText().clear();
                                             passwd2.getText().clear();
+                                            name2.getText().clear();
+                                            labNo2.getText().clear();
                                             loginProgress.dismiss();
                                         } else {
                                             mUser = mAuth.getCurrentUser();
                                             if (mUser != null)
                                                 User_Id = mUser.getUid();
-                                            Map<String, Object> data = new HashMap<>();
-                                            data.put("Admin", Boolean.FALSE);
-                                            data.put("Verified", Boolean.FALSE);
-                                            data.put("Name", name);
-                                            data.put("Lab No.", lab_no);
-                                            Sub_Admins.document(User_Id).set(data)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
+//                                            Map<String, Object> data = new HashMap<>();
+//                                            data.put("admin", Boolean.FALSE);
+//                                            data.put("name", name);
+//                                            data.put("labNo.", lab_no);
+//                                            Sub_Admins.document(User_Id).set(data)
+//                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                        @Override
+//                                                        public void onSuccess(Void aVoid) {
                                                             Map<String, Object> data2 = new HashMap<>();
-                                                            data2.put("E-mail", loginmail);
-                                                            data2.put("Name", name);
-                                                            data2.put("Lab No.", lab_no);
-                                                            data2.put("Access given", Boolean.FALSE);
-                                                            Admins.document(User_Id).set(data2)
+                                                            data2.put("email", loginmail);
+                                                            data2.put("name", name);
+                                                            data2.put("labNo", lab_no);
+                                                            data2.put("access_given", "pending");
+                                                            Admins.document("Sub-Admins").collection("Sub-Admins").document(User_Id).set(data2)
                                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                         @Override
                                                                         public void onSuccess(Void aVoid) {
                                                                             sendMailVerification(mUser);
+                                                                            mail2.getText().clear();
+                                                                            passwd2.getText().clear();
+                                                                            name2.getText().clear();
+                                                                            labNo2.getText().clear();
                                                                             Toast.makeText(LoginActivity.this, "Please verify your mail and wait for the admin to give you access.", Toast.LENGTH_LONG).show();
                                                                         }
                                                                     })
                                                                     .addOnFailureListener(new OnFailureListener() {
                                                                         @Override
                                                                         public void onFailure(@NonNull Exception e) {
+                                                                            mail2.getText().clear();
+                                                                            passwd2.getText().clear();
+                                                                            name2.getText().clear();
+                                                                            labNo2.getText().clear();
                                                                             Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                                                         }
                                                                     });
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
+//                                                        }
+//                                                    })
+//                                                    .addOnFailureListener(new OnFailureListener() {
+//                                                        @Override
+//                                                        public void onFailure(@NonNull Exception e) {
+//                                                            mail2.getText().clear();
+//                                                            passwd2.getText().clear();
+//                                                            name2.getText().clear();
+//                                                            labNo2.getText().clear();
+//                                                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                                }
+//                                            });
                                             loginProgress.dismiss();
                                         }
                                     }

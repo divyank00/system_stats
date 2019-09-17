@@ -79,7 +79,7 @@ public class Admin_signup extends AppCompatActivity {
                                         if (mUser != null) {
                                             User_Id = mUser.getUid();
                                             Map<String, Object> data = new HashMap<>();
-                                            data.put("Admin", Boolean.TRUE);
+                                            data.put("admin", Boolean.TRUE);
 //                                            data.put("E-mail verified", Boolean.FALSE);
                                             Admins.document(User_Id).set(data)
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
