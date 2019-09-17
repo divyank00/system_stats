@@ -59,7 +59,7 @@ public class itemAdapter extends FirestoreRecyclerAdapter<model_class, itemAdapt
                 public void onClick(View view) {
                     int position=getAdapterPosition();
                     if(position!=RecyclerView.NO_POSITION && listener!=null){
-                        listener.onYesClick(getSnapshots().getSnapshot(position),position);
+                        listener.onYesClick(getSnapshots().getSnapshot(position), position);
                         yes.setChecked(false);
                     }
                 }
@@ -69,7 +69,7 @@ public class itemAdapter extends FirestoreRecyclerAdapter<model_class, itemAdapt
                 public void onClick(View view) {
                     int position=getAdapterPosition();
                     if(position!=RecyclerView.NO_POSITION && listener!=null){
-                        listener.onNoClick(getSnapshots().getSnapshot(position),position);
+                        listener.onNoClick(getSnapshots().getSnapshot(position), position);
                         no.setChecked(false);
                     }
                 }
@@ -88,6 +88,7 @@ public class itemAdapter extends FirestoreRecyclerAdapter<model_class, itemAdapt
 
     public interface OnItemClickListener{
         void onYesClick(DocumentSnapshot documentSnapshot, int position);
+
         void onNoClick(DocumentSnapshot documentSnapshot, int position);
     }
 

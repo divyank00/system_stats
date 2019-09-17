@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,9 +18,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.auth.User;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +44,10 @@ public class Admin extends AppCompatActivity {
 
     private Button log_out;
 
+    private CollectionReference requests = Admins.document("Sub-Admins").collection("Sub-Admins");
+    private Query query = requests.whereEqualTo("access_given", "pending").orderBy("labNo", Query.Direction.ASCENDING);
+
+    private FirestoreRecyclerOptions<model_class>firebaseRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +66,8 @@ public class Admin extends AppCompatActivity {
 
         Toast.makeText(this, "Logged in as " + mUser.getEmail(), Toast.LENGTH_SHORT).show();
 
-        CollectionReference requests = Admins.document("Sub-Admins").collection("Sub-Admins");
-
-        Query query = requests.whereEqualTo("access_given", "pending").orderBy("labNo", Query.Direction.ASCENDING);
-
-        FirestoreRecyclerOptions<model_class> firebaseRecyclerAdapter = new FirestoreRecyclerOptions.Builder<model_class>()
+//        FirestoreRecyclerOptions<model_class>
+                firebaseRecyclerAdapter = new FirestoreRecyclerOptions.Builder<model_class>()
                 .setQuery(query, model_class.class)
                 .build();
 
@@ -83,7 +87,7 @@ public class Admin extends AppCompatActivity {
             @Override
             public void onYesClick(final DocumentSnapshot documentSnapshot, final int position) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Admin.this);
-                builder.setMessage("Do you confirm to grant access?")
+                builder.setTitle("Do you confirm to grant access?")
                         .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -93,6 +97,7 @@ public class Admin extends AppCompatActivity {
                                 data.put("labNo.", documentSnapshot.get("labNo"));
                                 Sub_Admins.document(documentSnapshot.getId()).set(data);
                                 Toast.makeText(Admin.this, "User added as sub-admin.", Toast.LENGTH_SHORT).show();
+
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -108,7 +113,7 @@ public class Admin extends AppCompatActivity {
             @Override
             public void onNoClick(final DocumentSnapshot documentSnapshot, int position) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(Admin.this);
-                builder.setMessage("Do you confirm to deny access?")
+                builder.setTitle("Do you confirm to deny access?")
                         .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -142,7 +147,6 @@ public class Admin extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         itemAdapter.startListening();
-
     }
 
     @Override
@@ -150,6 +154,4 @@ public class Admin extends AppCompatActivity {
         itemAdapter.stopListening();
         super.onStop();
     }
-
-
 }
