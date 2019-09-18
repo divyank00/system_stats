@@ -80,8 +80,7 @@ public class Sub_Admin extends AppCompatActivity {
                                                 Toast.makeText(Sub_Admin.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                             else {
                                                 model_classList.clear();
-                                                if (queryDocumentSnapshots != null) {
-                                                    if (!queryDocumentSnapshots.isEmpty()) {
+                                                if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                                                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
                                                             model_classList.add(new sub_admin_Lab_model_class(queryDocumentSnapshot.getId()));
                                                         }
@@ -109,7 +108,6 @@ public class Sub_Admin extends AppCompatActivity {
                                                             startActivity(intent);
                                                         }
                                                     });
-                                                }
                                             }
 
                                         }
