@@ -59,6 +59,7 @@ public class LoginActivity extends Activity {
         loginProgress = new ProgressDialog(this);
 
         mProgress.setMessage("Please Wait!");
+        mProgress.setCanceledOnTouchOutside(false);
         mProgress.show();
 
         mAuth = FirebaseAuth.getInstance();
@@ -115,19 +116,6 @@ public class LoginActivity extends Activity {
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
                             } else {
-//                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-//                                    Map<String,Object> data=new HashMap<>();
-//                                    if(documentSnapshot.getData().get("E-mail verified")=="true"){
-//                                        mProgress.dismiss();
-//                                        break;
-//                                    }
-//                                    else{
-//                                        mProgress.dismiss();
-//                                        Intent intent = new Intent(LoginActivity.this, Admin_signup.class);
-//                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                                        startActivity(intent);
-//                                    }
-//                                }
                                 mProgress.dismiss();
                             }
                         }
@@ -183,6 +171,7 @@ public class LoginActivity extends Activity {
                                         } else {
                                             mUser = mAuth.getCurrentUser();
                                             if (mUser != null && mUser.isEmailVerified()) {
+                                                User_Id = mUser.getUid();
                                                 Admins.document(mUser.getUid()).get()
                                                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                             @Override
@@ -192,6 +181,51 @@ public class LoginActivity extends Activity {
                                                                     Intent intent = new Intent(LoginActivity.this, Admin.class);
                                                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                                     startActivity(intent);
+                                                                } else {
+                                                                    Sub_Admins.document(mUser.getUid()).get()
+                                                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                                @Override
+                                                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                                    if (documentSnapshot.exists()) {
+                                                                                        loginProgress.dismiss();
+                                                                                        Intent intent = new Intent(LoginActivity.this, Sub_Admin.class);
+                                                                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                                                        startActivity(intent);
+                                                                                    } else {
+                                                                                        requests.document(mUser.getUid())
+                                                                                                .get()
+                                                                                                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                                                                    @Override
+                                                                                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                                                        if (documentSnapshot.exists()) {
+//                                                                    access_given = (String) documentSnapshot.get("access_given");
+                                                                                                            loginProgress.dismiss();
+                                                                                                            Toast.makeText(LoginActivity.this, "Please wait for the admin to give you access.", Toast.LENGTH_SHORT).show();
+                                                                                                            mAuth.signOut();
+                                                                                                        } else {
+                                                                                                            loginProgress.dismiss();
+                                                                                                            Toast.makeText(LoginActivity.this, "Admin has denied to give you access.", Toast.LENGTH_SHORT).show();
+                                                                                                            mUser.delete();
+                                                                                                            mAuth.signOut();
+                                                                                                        }
+                                                                                                    }
+                                                                                                })
+                                                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                                                    @Override
+                                                                                                    public void onFailure(@NonNull Exception e) {
+                                                                                                        Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                                    }
+                                                                                                });
+
+                                                                                    }
+                                                                                }
+                                                                            })
+                                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                                @Override
+                                                                                public void onFailure(@NonNull Exception e) {
+                                                                                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                                }
+                                                                            });
                                                                 }
                                                             }
                                                         })
@@ -202,55 +236,41 @@ public class LoginActivity extends Activity {
                                                                 loginProgress.dismiss();
                                                             }
                                                         });
-                                                requests.document(mUser.getUid())
-                                                        .get()
-                                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                            @Override
-                                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                                if (documentSnapshot.exists())
-                                                                    access_given = (String) documentSnapshot.get("access_given");
-                                                            }
-                                                        })
-                                                        .addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
 
-                                                if ("yes".equals(access_given)) {
-                                                    User_Id = mUser.getUid();
 
-                                                    Sub_Admins.document(User_Id).get()
-                                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                                                @Override
-                                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                                    if (documentSnapshot.exists()) {
-                                                                        loginProgress.dismiss();
-                                                                        Intent intent = new Intent(LoginActivity.this, Sub_Admin.class);
-                                                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                                                        startActivity(intent);
-                                                                    }
-                                                                }
-                                                            })
-                                                            .addOnFailureListener(new OnFailureListener() {
-                                                                @Override
-                                                                public void onFailure(@NonNull Exception e) {
-                                                                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                    loginProgress.dismiss();
-                                                                }
-                                                            });
-
-                                                } else if ("no".equals(access_given)) {
-                                                    loginProgress.dismiss();
-                                                    Toast.makeText(LoginActivity.this, "Admin has denied to give you access.", Toast.LENGTH_SHORT).show();
-                                                    mUser.delete();
-                                                    mAuth.signOut();
-                                                } else if ("pending".equals(access_given)) {
-                                                    loginProgress.dismiss();
-                                                    Toast.makeText(LoginActivity.this, "Please wait for the admin to give you access.", Toast.LENGTH_SHORT).show();
-                                                    mAuth.signOut();
-                                                }
+//                                                if ("yes".equals(access_given)) {
+//                                                    User_Id = mUser.getUid();
+//
+//                                                    Sub_Admins.document(User_Id).get()
+//                                                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                                                                @Override
+//                                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                                                                    if (documentSnapshot.exists()) {
+//                                                                        loginProgress.dismiss();
+//                                                                        Intent intent = new Intent(LoginActivity.this, Sub_Admin.class);
+//                                                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                                                        startActivity(intent);
+//                                                                    }
+//                                                                }
+//                                                            })
+//                                                            .addOnFailureListener(new OnFailureListener() {
+//                                                                @Override
+//                                                                public void onFailure(@NonNull Exception e) {
+//                                                                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                                                    loginProgress.dismiss();
+//                                                                }
+//                                                            });
+//
+//                                                } else if ("no".equals(access_given)) {
+//                                                    loginProgress.dismiss();
+//                                                    Toast.makeText(LoginActivity.this, "Admin has denied to give you access.", Toast.LENGTH_SHORT).show();
+//                                                    mUser.delete();
+//                                                    mAuth.signOut();
+//                                                } else if ("pending".equals(access_given)) {
+//                                                    loginProgress.dismiss();
+//                                                    Toast.makeText(LoginActivity.this, "Please wait for the admin to give you access.", Toast.LENGTH_SHORT).show();
+//                                                    mAuth.signOut();
+//                                                }
                                             } else {
                                                 loginProgress.dismiss();
                                                 Toast.makeText(LoginActivity.this, "Please verify your e-mail.", Toast.LENGTH_SHORT).show();
