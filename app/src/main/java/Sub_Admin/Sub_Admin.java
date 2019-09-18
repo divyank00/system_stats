@@ -8,14 +8,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.system_stats.LoginActivity;
 import com.example.system_stats.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -41,15 +40,12 @@ public class Sub_Admin extends AppCompatActivity {
 
     private DocumentReference lab = db.collection("LAB").document("LAB");
 
-    //    private CollectionReference Admins = db.collection("Admins");
     private CollectionReference Sub_Admins = db.collection("Sub_Admins");
 
     private String UId, labNo;
 
     private ArrayList<sub_admin_Lab_model_class> model_classList = new ArrayList<>();
 
-    private LabItemAdapter labItemAdapter;
-    Query query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,93 +69,53 @@ public class Sub_Admin extends AppCompatActivity {
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                        labNo = (String) documentSnapshot.get("labNo");
+                        if (documentSnapshot != null) {
+                            labNo = (String) documentSnapshot.get("labNo");
+                        }
                         if (labNo != null) {
                             lab.collection(labNo)
                                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                                         @Override
                                         public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                                            if (queryDocumentSnapshots != null) {
+                                            if (e != null)
+                                                Toast.makeText(Sub_Admin.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            else {
                                                 model_classList.clear();
-                                                for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                                    model_classList.add(new sub_admin_Lab_model_class(queryDocumentSnapshot.getId()));
-
-                                                    RecyclerView recyclerView = findViewById(R.id.rV_subAdmin);
-                                                    recyclerView.setHasFixedSize(true);
-                                                    LinearLayoutManager linearLayout = new LinearLayoutManager(Sub_Admin.this);
-                                                    linearLayout.setOrientation(LinearLayoutManager.VERTICAL);
-                                                    recyclerView.setLayoutManager(linearLayout);
-
-                                                    LabItemAdapter labItemAdapter = new LabItemAdapter(model_classList);
-
-                                                    labItemAdapter.notifyDataSetChanged();
-                                                    recyclerView.setAdapter(labItemAdapter);
-
-                                                    labItemAdapter.setOnItemClickLIstener(new LabItemAdapter.OnItemClickListener() {
-                                                        @Override
-                                                        public void onClick(String PCno, int position) {
-                                                            Intent intent = new Intent(Sub_Admin.this, PC_info.class);
-                                                            intent.putExtra("Labno", labNo);
-                                                            intent.putExtra("PCno", PCno);
-                                                            startActivity(intent);
-                                                        }
-                                                    });
+                                                if (queryDocumentSnapshots != null) {
+                                                    for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                                        model_classList.add(new sub_admin_Lab_model_class(queryDocumentSnapshot.getId()));
+                                                    }
+                                                } else {
+                                                    showMessage("Desktop Application not installed...", "Install the desktop app in your lab PC's!");
                                                 }
+                                                RecyclerView recyclerView = findViewById(R.id.rV_subAdmin);
+                                                recyclerView.setHasFixedSize(true);
+                                                LinearLayoutManager linearLayout = new LinearLayoutManager(Sub_Admin.this);
+                                                linearLayout.setOrientation(LinearLayoutManager.VERTICAL);
+                                                recyclerView.setLayoutManager(linearLayout);
+
+                                                LabItemAdapter labItemAdapter = new LabItemAdapter(model_classList);
+                                                labItemAdapter.notifyDataSetChanged();
+
+                                                recyclerView.setAdapter(labItemAdapter);
+
+
+                                                labItemAdapter.setOnItemClickLIstener(new LabItemAdapter.OnItemClickListener() {
+                                                    @Override
+                                                    public void onClick(String PCno, int position) {
+                                                        Intent intent = new Intent(Sub_Admin.this, PC_info.class);
+                                                        intent.putExtra("Labno", labNo);
+                                                        intent.putExtra("PCno", PCno);
+                                                        startActivity(intent);
+                                                    }
+                                                });
                                             }
+
                                         }
                                     });
                         }
                     }
                 });
-
-//        Sub_Admins
-//                .document(UId)
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        labNo = (String) documentSnapshot.get("labNo");
-//                        if (labNo != null) {
-//                            lab.collection(labNo).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                                @Override
-//                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                                    for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-//
-//                                        model_classList.add(new sub_admin_Lab_model_class(queryDocumentSnapshot.getId()));
-//
-//                                        RecyclerView recyclerView = findViewById(R.id.rV_subAdmin);
-//                                        recyclerView.setHasFixedSize(true);
-//                                        LinearLayoutManager linearLayout = new LinearLayoutManager(Sub_Admin.this);
-//                                        linearLayout.setOrientation(LinearLayoutManager.VERTICAL);
-//                                        recyclerView.setLayoutManager(linearLayout);
-//
-//                                        LabItemAdapter labItemAdapter = new LabItemAdapter(model_classList);
-//
-//                                        labItemAdapter.notifyDataSetChanged();
-//                                        recyclerView.setAdapter(labItemAdapter);
-//
-//                                        labItemAdapter.setOnItemClickLIstener(new LabItemAdapter.OnItemClickListener() {
-//                                            @Override
-//                                            public void onClick(String PCno, int position) {
-//                                                Intent intent = new Intent(Sub_Admin.this, PC_info.class);
-//                                                intent.putExtra("Labno", labNo);
-//                                                intent.putExtra("PCno", PCno);
-//                                                startActivity(intent);
-//                                            }
-//                                        });
-//                                    }
-//                                }
-//                            })
-//                                    .addOnFailureListener(new OnFailureListener() {
-//                                        @Override
-//                                        public void onFailure(@NonNull Exception e) {
-//                                            Toast.makeText(Sub_Admin.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    });
-//                        }
-//                    }
-//                });
-
     }
 
     @Override
@@ -179,6 +135,14 @@ public class Sub_Admin extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showMessage(String title, String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
     }
 
 }
