@@ -3,7 +3,10 @@ package com.example.system_stats;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -86,6 +89,9 @@ public class LoginActivity extends Activity {
                                                     Intent intent = new Intent(LoginActivity.this, Sub_Admin.class);
                                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                     startActivity(intent);
+                                                }
+                                                else{
+                                                    mAuth.signOut();
                                                 }
                                             }
                                         })
@@ -395,5 +401,18 @@ public class LoginActivity extends Activity {
         exit.addCategory(Intent.CATEGORY_HOME);
         exit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(exit);
+    }
+
+    public static boolean isConnectionAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+            if (netInfo != null && netInfo.isConnected()
+                    && netInfo.isConnectedOrConnecting()
+                    && netInfo.isAvailable()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
