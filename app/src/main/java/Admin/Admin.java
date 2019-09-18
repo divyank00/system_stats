@@ -1,17 +1,21 @@
-package com.example.system_stats;
+package Admin;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.system_stats.LoginActivity;
+import com.example.system_stats.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -70,7 +74,7 @@ public class Admin extends AppCompatActivity {
 
             itemAdapter = new itemAdapter(firebaseRecyclerAdapter);
 
-            log_out = findViewById(R.id.log_out);
+//            log_out = findViewById(R.id.log_out);
             recyclerView = findViewById(R.id.rV);
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -93,7 +97,7 @@ public class Admin extends AppCompatActivity {
                                     Map<String, Object> data = new HashMap<>();
                                     data.put("name", documentSnapshot.get("name"));
                                     data.put("email", documentSnapshot.get("email"));
-                                    data.put("labNo.", documentSnapshot.get("labNo"));
+                                    data.put("labNo", documentSnapshot.get("labNo"));
                                     Sub_Admins.document(documentSnapshot.getId()).set(data);
                                     Admins.document("Sub-Admins").collection("Sub-Admins").document(documentSnapshot.getId())
                                             .delete();
@@ -122,7 +126,7 @@ public class Admin extends AppCompatActivity {
                                     Map<String, Object> data = new HashMap<>();
                                     data.put("name", documentSnapshot.get("name"));
                                     data.put("email", documentSnapshot.get("email"));
-                                    data.put("labNo.", documentSnapshot.get("labNo"));
+                                    data.put("labNo", documentSnapshot.get("labNo"));
                                     db.collection("Spam").document(documentSnapshot.getId()).set(data);
                                     Admins.document("Sub-Admins").collection("Sub-Admins").document(documentSnapshot.getId())
                                             .delete();
@@ -141,15 +145,15 @@ public class Admin extends AppCompatActivity {
                 }
             });
 
-            log_out.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mAuth.signOut();
-                    Intent intent = new Intent(Admin.this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
-            });
+//            log_out.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    mAuth.signOut();
+//                    Intent intent = new Intent(Admin.this, LoginActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(intent);
+//                }
+//            });
         }
     }
     @Override
@@ -162,5 +166,23 @@ public class Admin extends AppCompatActivity {
     public void onStop() {
         itemAdapter.stopListening();
         super.onStop();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_logout:
+                mAuth.signOut();
+                Intent intent = new Intent(Admin.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

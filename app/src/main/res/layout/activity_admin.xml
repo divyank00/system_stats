@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin"
+    tools:context="Admin.Admin"
     android:orientation="vertical">
-    <Button
-        android:id="@+id/log_out"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Log Out" />
+<!--    <Button-->
+<!--        android:id="@+id/log_out"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:text="Log Out" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rV"

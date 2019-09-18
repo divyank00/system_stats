@@ -1,4 +1,4 @@
-package com.example.system_stats;
+package Admin;
 
 public class model_class {
     private String name;

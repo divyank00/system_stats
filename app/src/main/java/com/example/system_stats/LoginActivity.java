@@ -30,6 +30,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+import Admin.Admin;
+import Sub_Admin.Sub_Admin;
+
 public class LoginActivity extends Activity {
 
     private EditText mail, passwd, mail2, passwd2, name2, labNo2;
@@ -333,7 +336,7 @@ public class LoginActivity extends Activity {
                                                             Map<String, Object> data2 = new HashMap<>();
                                                             data2.put("email", loginmail);
                                                             data2.put("name", name);
-                                                            data2.put("labNo", lab_no);
+                                                            data2.put("labNo", "Lab"+lab_no);
                                                             data2.put("access_given", "pending");
                                                             Admins.document("Sub-Admins").collection("Sub-Admins").document(User_Id).set(data2)
                                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
