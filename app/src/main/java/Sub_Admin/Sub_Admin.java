@@ -23,7 +23,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -82,33 +81,35 @@ public class Sub_Admin extends AppCompatActivity {
                                             else {
                                                 model_classList.clear();
                                                 if (queryDocumentSnapshots != null) {
-                                                    for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                                        model_classList.add(new sub_admin_Lab_model_class(queryDocumentSnapshot.getId()));
+                                                    if (!queryDocumentSnapshots.isEmpty()) {
+                                                        for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
+                                                            model_classList.add(new sub_admin_Lab_model_class(queryDocumentSnapshot.getId()));
+                                                        }
+                                                    } else {
+                                                        showMessage("Desktop Application not installed...", "Please install the desktop application in your lab PC's to view their status!");
                                                     }
-                                                } else {
-                                                    showMessage("Desktop Application not installed...", "Install the desktop app in your lab PC's!");
+                                                    RecyclerView recyclerView = findViewById(R.id.rV_subAdmin);
+                                                    recyclerView.setHasFixedSize(true);
+                                                    LinearLayoutManager linearLayout = new LinearLayoutManager(Sub_Admin.this);
+                                                    linearLayout.setOrientation(LinearLayoutManager.VERTICAL);
+                                                    recyclerView.setLayoutManager(linearLayout);
+
+                                                    LabItemAdapter labItemAdapter = new LabItemAdapter(model_classList);
+                                                    labItemAdapter.notifyDataSetChanged();
+
+                                                    recyclerView.setAdapter(labItemAdapter);
+
+
+                                                    labItemAdapter.setOnItemClickLIstener(new LabItemAdapter.OnItemClickListener() {
+                                                        @Override
+                                                        public void onClick(String PCno, int position) {
+                                                            Intent intent = new Intent(Sub_Admin.this, PC_info.class);
+                                                            intent.putExtra("Labno", labNo);
+                                                            intent.putExtra("PCno", PCno);
+                                                            startActivity(intent);
+                                                        }
+                                                    });
                                                 }
-                                                RecyclerView recyclerView = findViewById(R.id.rV_subAdmin);
-                                                recyclerView.setHasFixedSize(true);
-                                                LinearLayoutManager linearLayout = new LinearLayoutManager(Sub_Admin.this);
-                                                linearLayout.setOrientation(LinearLayoutManager.VERTICAL);
-                                                recyclerView.setLayoutManager(linearLayout);
-
-                                                LabItemAdapter labItemAdapter = new LabItemAdapter(model_classList);
-                                                labItemAdapter.notifyDataSetChanged();
-
-                                                recyclerView.setAdapter(labItemAdapter);
-
-
-                                                labItemAdapter.setOnItemClickLIstener(new LabItemAdapter.OnItemClickListener() {
-                                                    @Override
-                                                    public void onClick(String PCno, int position) {
-                                                        Intent intent = new Intent(Sub_Admin.this, PC_info.class);
-                                                        intent.putExtra("Labno", labNo);
-                                                        intent.putExtra("PCno", PCno);
-                                                        startActivity(intent);
-                                                    }
-                                                });
                                             }
 
                                         }
