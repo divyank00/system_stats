@@ -42,7 +42,7 @@ public class accepted_fragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        recyclerView=view.findViewById(R.id.rV);
+        recyclerView=view.findViewById(R.id.rV2);
 
         Query query = Sub_Admins
                 .orderBy("labNo", Query.Direction.ASCENDING);
