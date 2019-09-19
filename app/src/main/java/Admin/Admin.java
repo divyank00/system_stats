@@ -18,6 +18,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import Admin.accepted.accepted_fragment;
+import Admin.pending.pending_fragment;
+
 public class Admin extends AppCompatActivity {
 
     private FirebaseAuth mAuth;

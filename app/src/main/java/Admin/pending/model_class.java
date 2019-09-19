@@ -1,4 +1,6 @@
-package Admin;
+package Admin.pending;
+
+import Admin.Admin;
 
 public class model_class {
     private String name;

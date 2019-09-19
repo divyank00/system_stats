@@ -1,4 +1,4 @@
-package Admin;
+package Admin.pending;
 
 import android.view.LayoutInflater;
 import android.view.View;

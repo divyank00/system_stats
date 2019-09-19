@@ -12,9 +12,4 @@ public class sub_admin_Lab_model_class {
     private String PCno;
 
     public sub_admin_Lab_model_class(){}
-
-
-
-
-
 }
