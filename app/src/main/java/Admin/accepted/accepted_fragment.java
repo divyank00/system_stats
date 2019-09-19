@@ -68,4 +68,15 @@ public class accepted_fragment extends Fragment {
             }
         });
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        accepteditemAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        accepteditemAdapter.stopListening();
+        super.onStop();
+    }
 }
