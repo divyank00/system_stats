@@ -15,18 +15,20 @@ import android.view.ViewGroup;
 import com.example.system_stats.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import Admin.Admin;
 import Admin.pending.itemAdapter;
 import Admin.pending.model_class;
+import Sub_Admin.Sub_Admin;
 
 
 public class accepted_fragment extends Fragment {
 
     private RecyclerView recyclerView;
-    private itemAdapter itemAdapter;
+    private accepteditemAdapter accepteditemAdapter;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference Admins = db.collection("Admins");
@@ -49,14 +51,21 @@ public class accepted_fragment extends Fragment {
                 .setQuery(query, model_class.class)
                 .build();
 
-        itemAdapter = new itemAdapter(firebaseRecyclerAdapter);
+        accepteditemAdapter = new accepteditemAdapter(firebaseRecyclerAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
-        itemAdapter.notifyDataSetChanged();
-        recyclerView.setAdapter(itemAdapter);
+        accepteditemAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(accepteditemAdapter);
+
+        accepteditemAdapter.setOnItemClickLIstener(new accepteditemAdapter.OnItemClickListener() {
+            @Override
+            public void onDeleteClick(DocumentSnapshot documentSnapshot, int position) {
+                Sub_Admins.document(documentSnapshot.getId()).delete();
+            }
+        });
     }
 }
