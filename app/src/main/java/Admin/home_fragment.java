@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.system_stats.Admin_Lab;
 import com.example.system_stats.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -81,7 +82,7 @@ public class home_fragment extends Fragment {
                             labItemAdapter.setOnItemClickLIstener(new adminLabAdapter.OnItemClickListener() {
                                 @Override
                                 public void onClick(String LabNo, int position) {
-                                    Intent intent = new Intent(view.getContext(), Sub_Admin.Sub_Admin.class);
+                                    Intent intent = new Intent(view.getContext(), Admin_Lab.class);
                                     intent.putExtra("Labno", labNo);
                                     startActivity(intent);
                                 }
