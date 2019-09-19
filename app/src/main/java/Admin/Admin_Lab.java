@@ -41,7 +41,8 @@ public class Admin_Lab extends AppCompatActivity {
         final String LabNo = intentThatStartedThisActivity.getStringExtra("Labno");
         Toast.makeText(this, LabNo, Toast.LENGTH_SHORT).show();
 
-        lab.collection(LabNo)
+        assert LabNo != null;
+        lab.collection(LabNo.toLowerCase())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -51,7 +52,7 @@ public class Admin_Lab extends AppCompatActivity {
                             model_classList.clear();
                             if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                                 for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                    model_classList.add(new sub_admin_Lab_model_class(queryDocumentSnapshot.getId()));
+                                    model_classList.add(new sub_admin_Lab_model_class(queryDocumentSnapshot.getId().toUpperCase()));
                                 }
                             } else {
                                 showMessage("Desktop Application not installed...", "Please install the desktop application in your lab PC's to view their status!");

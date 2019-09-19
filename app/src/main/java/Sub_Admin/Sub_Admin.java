@@ -82,7 +82,7 @@ public class Sub_Admin extends AppCompatActivity {
                                                 model_classList.clear();
                                                 if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                                                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                                                            model_classList.add(new sub_admin_Lab_model_class(queryDocumentSnapshot.getId()));
+                                                            model_classList.add(new sub_admin_Lab_model_class(queryDocumentSnapshot.getId().toUpperCase()));
                                                         }
                                                     } else {
                                                         showMessage("Desktop Application not installed...", "Please install the desktop application in your lab PC's to view their status!");
@@ -121,6 +121,14 @@ public class Sub_Admin extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent exit = new Intent(Intent.ACTION_MAIN);
+        exit.addCategory(Intent.CATEGORY_HOME);
+        exit.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(exit);
     }
 
     @Override

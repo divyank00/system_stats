@@ -12,8 +12,6 @@ import com.example.system_stats.R;
 
 import java.util.List;
 
-import Admin.admin_lab_model_class;
-
 public class adminLabAdapter extends RecyclerView.Adapter<adminLabAdapter.ViewHolder> {
 
     private List<admin_lab_model_class> model_classList;

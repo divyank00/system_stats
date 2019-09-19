@@ -25,6 +25,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class home_fragment extends Fragment {
@@ -61,7 +62,7 @@ public class home_fragment extends Fragment {
                     model_classList.clear();
                     if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
                         for (QueryDocumentSnapshot queryDocumentSnapshot : queryDocumentSnapshots) {
-                            model_classList.add(new admin_lab_model_class(queryDocumentSnapshot.getId()));
+                            model_classList.add(new admin_lab_model_class(queryDocumentSnapshot.getId().toUpperCase()));
                             RecyclerView recyclerView = view.findViewById(R.id.rV_Admin);
                             recyclerView.setHasFixedSize(true);
                             LinearLayoutManager linearLayout = new LinearLayoutManager(view.getContext());
@@ -92,7 +93,7 @@ public class home_fragment extends Fragment {
     }
 
     public void showMessage(String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getContext()));
         builder.setCancelable(true);
         builder.setTitle(title);
         builder.setMessage(message);

@@ -2,18 +2,14 @@ package Sub_Admin.PC_info;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.system_stats.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -58,13 +54,14 @@ public class PC_info extends AppCompatActivity {
         shut_down=findViewById(R.id.shutDown);
 
         Intent intentThatStartedThisActivtiy = getIntent();
-        final String PC = intentThatStartedThisActivtiy.getStringExtra("PCno");
+        String PC = intentThatStartedThisActivtiy.getStringExtra("PCno");
         String Lab = intentThatStartedThisActivtiy.getStringExtra("Labno");
-        Toast.makeText(this, Lab + ": " + PC, Toast.LENGTH_SHORT).show();
+        assert Lab != null;
+        Toast.makeText(this, Lab.toUpperCase() + ":  " + PC, Toast.LENGTH_SHORT).show();
 
-        if (PC != null && Lab != null) {
-            pc = lab.collection(Lab).document(PC);
-        }
+
+        assert PC != null;
+        pc = lab.collection(Lab.toLowerCase()).document(PC.toLowerCase());
         pc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -86,12 +83,12 @@ public class PC_info extends AppCompatActivity {
                 }
             }
         });
-        shut_down.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pc.update("shutDown",Boolean.TRUE);
-                Toast.makeText(PC_info.this, PC+" is being shutting down.", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        shut_down.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                pc.update("shutDown",Boolean.TRUE);
+//                Toast.makeText(PC_info.this, PC+" is being shutting down.", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 }
