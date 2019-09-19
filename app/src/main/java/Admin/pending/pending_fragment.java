@@ -26,10 +26,6 @@ import com.google.firebase.firestore.Query;
 import java.util.HashMap;
 import java.util.Map;
 
-import Admin.Admin;
-import Admin.pending.itemAdapter;
-import Admin.pending.model_class;
-
 public class pending_fragment extends Fragment {
     private RecyclerView recyclerView;
     private itemAdapter itemAdapter;

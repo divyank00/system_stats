@@ -1,16 +1,18 @@
 package Admin.accepted;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.system_stats.R;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -19,10 +21,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import Admin.Admin;
-import Admin.pending.itemAdapter;
+import java.util.HashMap;
+import java.util.Map;
+
 import Admin.pending.model_class;
-import Sub_Admin.Sub_Admin;
 
 
 public class accepted_fragment extends Fragment {
@@ -41,7 +43,7 @@ public class accepted_fragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         recyclerView=view.findViewById(R.id.rV2);
 
         Query query = Sub_Admins
@@ -63,8 +65,24 @@ public class accepted_fragment extends Fragment {
 
         accepteditemAdapter.setOnItemClickLIstener(new accepteditemAdapter.OnItemClickListener() {
             @Override
-            public void onDeleteClick(DocumentSnapshot documentSnapshot, int position) {
-                Sub_Admins.document(documentSnapshot.getId()).delete();
+            public void onDeleteClick(final DocumentSnapshot documentSnapshot, int position) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Do you confirm to revoke the access given to this sub-admin?")
+                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Sub_Admins.document(documentSnapshot.getId()).delete();
+                                Toast.makeText(view.getContext(), "Sub-Admin deleted!", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        })
+                        .setCancelable(false)
+                        .show();
             }
         });
     }
