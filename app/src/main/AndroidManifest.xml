@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Admin_Lab"></activity>
+        <activity android:name="Admin.Admin_Lab"></activity>
         <activity android:name="Sub_Admin.PC_info.PC_info" />
         <activity android:name=".Admin_signup" />
         <activity android:name="Admin.Admin" />

@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.system_stats.Admin_Lab;
 import com.example.system_stats.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,12 +26,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import Sub_Admin.PC_info.PC_info;
-
 
 public class home_fragment extends Fragment {
-    private RecyclerView recyclerView;
-    private adminLabAdapter adminLabAdapter;
 
     private ArrayList<admin_lab_model_class> model_classList = new ArrayList<>();
 
@@ -56,7 +51,6 @@ public class home_fragment extends Fragment {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
-        recyclerView = view.findViewById(R.id.rV_Admin);
 
         lab.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -79,11 +73,11 @@ public class home_fragment extends Fragment {
 
                             recyclerView.setAdapter(labItemAdapter);
 
-                            labItemAdapter.setOnItemClickLIstener(new adminLabAdapter.OnItemClickListener() {
+                            labItemAdapter.setOnItemClickListener(new adminLabAdapter.OnItemClickListener() {
                                 @Override
                                 public void onClick(String LabNo, int position) {
                                     Intent intent = new Intent(view.getContext(), Admin_Lab.class);
-                                    intent.putExtra("Labno", labNo);
+                                    intent.putExtra("Labno", LabNo);
                                     startActivity(intent);
                                 }
                             });

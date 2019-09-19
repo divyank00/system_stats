@@ -64,7 +64,7 @@ public class adminLabAdapter extends RecyclerView.Adapter<adminLabAdapter.ViewHo
 
     }
 
-    public void setOnItemClickLIstener(OnItemClickListener listener){
+    public void setOnItemClickListener(OnItemClickListener listener){
         this.listener=listener;
     }
 }
