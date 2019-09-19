@@ -2,6 +2,8 @@ package Sub_Admin.PC_info;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class PC_info extends AppCompatActivity {
     private TextView total, used, available, cpu_brand, cpu_mnf, cpu_spd, cpu_usage, mnf_brand, mnf_model, platorm;
-
+    private Button shut_down;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
 
@@ -53,9 +55,10 @@ public class PC_info extends AppCompatActivity {
         mnf_brand = findViewById(R.id.tV16);
         mnf_model = findViewById(R.id.tV18);
         platorm = findViewById(R.id.tV20);
+        shut_down=findViewById(R.id.shutDown);
 
         Intent intentThatStartedThisActivtiy = getIntent();
-        String PC = intentThatStartedThisActivtiy.getStringExtra("PCno");
+        final String PC = intentThatStartedThisActivtiy.getStringExtra("PCno");
         String Lab = intentThatStartedThisActivtiy.getStringExtra("Labno");
         Toast.makeText(this, Lab + ": " + PC, Toast.LENGTH_SHORT).show();
 
@@ -81,6 +84,13 @@ public class PC_info extends AppCompatActivity {
                         platorm.setText((String) documentSnapshot.get("platform"));
                     }
                 }
+            }
+        });
+        shut_down.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pc.update("shutDown",Boolean.TRUE);
+                Toast.makeText(PC_info.this, PC+" is being shutting down.", Toast.LENGTH_SHORT).show();
             }
         });
     }
