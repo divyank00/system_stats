@@ -28,7 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import Sub_Admin.PC_info.PC_info;
+import PC_info.PC_info;
 
 public class Sub_Admin extends AppCompatActivity {
 

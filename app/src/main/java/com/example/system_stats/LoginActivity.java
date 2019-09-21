@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -27,16 +28,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import Admin.Admin;
 import Sub_Admin.Sub_Admin;
 
 public class LoginActivity extends Activity {
 
-    private EditText mail, passwd, mail2, passwd2, name2, labNo2;
-    private FloatingActionButton submit, submit2;
+    private EditText mail, passwd;
+    private FloatingActionButton submit;
+    private Button signup;
 
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
@@ -49,7 +48,7 @@ public class LoginActivity extends Activity {
 
     private ProgressDialog loginProgress, mProgress;
 
-    private String loginmail, loginpass, name, lab_no, User_Id, access_given;
+    private String loginmail, loginpass, name, lab_no, User_Id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +91,7 @@ public class LoginActivity extends Activity {
                                                     Intent intent = new Intent(LoginActivity.this, Sub_Admin.class);
                                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                     startActivity(intent);
-                                                }
-                                                else{
+                                                } else {
                                                     mAuth.signOut();
                                                 }
                                             }
@@ -140,12 +138,7 @@ public class LoginActivity extends Activity {
             mail = findViewById(R.id.eT_mail);
             passwd = findViewById(R.id.eT_passwd);
             submit = findViewById(R.id.btn_submit);
-
-            mail2 = findViewById(R.id.eT_mail2);
-            passwd2 = findViewById(R.id.eT_passwd2);
-            submit2 = findViewById(R.id.btn_submit2);
-            name2 = findViewById(R.id.eT_name2);
-            labNo2 = findViewById(R.id.eT_lab_no2);
+            signup=findViewById(R.id.btn_submit2);
 
             if (mail_intent != null && password_intent != null && toast_intent != null) {
                 mail.setText(mail_intent);
@@ -256,90 +249,15 @@ public class LoginActivity extends Activity {
                     }
                 }
             });
-
-            submit2.setOnClickListener(new View.OnClickListener() {
+            signup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    loginmail = mail2.getText().toString().trim();
-                    loginpass = passwd2.getText().toString().trim();
-                    name = name2.getText().toString().trim();
-                    lab_no = labNo2.getText().toString().trim();
-
-                    if (loginmail.isEmpty())
-                        mail2.setError("Mandatory field.");
-                    if (loginpass.isEmpty())
-                        passwd2.setError("Mandatory field.");
-                    else if (!loginmail.isEmpty() && !loginpass.isEmpty()) {
-                        loginProgress.setMessage("Signing Up...");
-                        loginProgress.setCanceledOnTouchOutside(false);
-                        loginProgress.show();
-                        mAuth.createUserWithEmailAndPassword(loginmail, loginpass)
-                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        if (!task.isSuccessful()) {
-                                            String errorMessage = task.getException().getMessage();
-                                            Toast.makeText(LoginActivity.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
-                                            mail2.getText().clear();
-                                            passwd2.getText().clear();
-                                            name2.getText().clear();
-                                            labNo2.getText().clear();
-                                            loginProgress.dismiss();
-                                        } else {
-                                            mUser = mAuth.getCurrentUser();
-                                            if (mUser != null)
-                                                User_Id = mUser.getUid();
-                                                            Map<String, Object> data2 = new HashMap<>();
-                                                            data2.put("email", loginmail);
-                                                            data2.put("name", name);
-                                                            data2.put("labNo", "lab"+lab_no);
-                                                            data2.put("access_given", "pending");
-                                                            Admins.document("Sub-Admins").collection("Sub-Admins").document(User_Id).set(data2)
-                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                        @Override
-                                                                        public void onSuccess(Void aVoid) {
-                                                                            sendMailVerification(mUser);
-                                                                            mail2.getText().clear();
-                                                                            passwd2.getText().clear();
-                                                                            name2.getText().clear();
-                                                                            labNo2.getText().clear();
-                                                                            loginProgress.dismiss();
-                                                                            Toast.makeText(LoginActivity.this, "Please verify your mail and wait for the admin to give you access.", Toast.LENGTH_LONG).show();
-                                                                        }
-                                                                    })
-                                                                    .addOnFailureListener(new OnFailureListener() {
-                                                                        @Override
-                                                                        public void onFailure(@NonNull Exception e) {
-                                                                            mail2.getText().clear();
-                                                                            passwd2.getText().clear();
-                                                                            name2.getText().clear();
-                                                                            labNo2.getText().clear();
-                                                                            loginProgress.dismiss();
-                                                                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    });
-                                        }
-                                    }
-                                });
-                    }
+                    Intent intent=new Intent(LoginActivity.this,signup_sub_admin.class);
+                    startActivity(intent);
                 }
             });
         }
-    }
 
-    private void sendMailVerification(FirebaseUser mUser) {
-        mUser.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (!task.isSuccessful()) {
-                    Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    loginProgress.dismiss();
-                } else {
-                    mAuth.signOut();
-                    loginProgress.dismiss();
-                }
-            }
-        });
     }
 
     @Override

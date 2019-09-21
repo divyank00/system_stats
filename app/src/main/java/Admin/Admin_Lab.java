@@ -21,7 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import Sub_Admin.LabItemAdapter;
-import Sub_Admin.PC_info.PC_info;
+import PC_info.PC_info;
 import Sub_Admin.sub_admin_Lab_model_class;
 
 public class Admin_Lab extends AppCompatActivity {

@@ -14,8 +14,13 @@
         android:text="Sign Up as Admin."
         android:layout_marginTop="20dp"
         android:textSize="30sp"
-        android:layout_marginStart="10dp"/>
+        android:layout_marginStart="10dp"
+        android:textStyle="bold"/>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
     <EditText
         android:id="@+id/eT_mail"
         android:layout_width="match_parent"
@@ -27,7 +32,12 @@
         android:ems="10"
         android:hint="E-Mail"
         android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:passwordToggleEnabled="true">
     <EditText
         android:id="@+id/eT_passwd"
         android:layout_width="match_parent"
@@ -38,6 +48,7 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_submit"

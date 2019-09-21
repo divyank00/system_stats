@@ -6,35 +6,49 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".LoginActivity">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
     <TextView
         android:id="@+id/tV1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login as Admin/Sub-Admin."
         android:layout_marginTop="20dp"
+        android:textStyle="bold"
         android:textSize="30sp"
         android:layout_marginStart="10dp"/>
 
-    <EditText
-        android:id="@+id/eT_mail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:hint="E-Mail"
-        android:inputType="textEmailAddress" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+
+                <EditText
+                    android:id="@+id/eT_mail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:ems="10"
+                    android:hint="E-Mail"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:passwordToggleEnabled="true">
 
     <EditText
         android:id="@+id/eT_passwd"
@@ -46,8 +60,10 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,73 +75,22 @@
         android:backgroundTint="#5C00FD"
         app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
 
-    <TextView
-        android:id="@+id/tV2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sign Up as Sub-Admin."
-        android:layout_marginTop="50dp"
-        android:textSize="30sp"
-        android:layout_marginStart="10dp"/>
-
-    <EditText
-        android:id="@+id/eT_mail2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:hint="E-Mail"
-        android:inputType="textEmailAddress" />
-
-            <EditText
-                android:id="@+id/eT_name2"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:ems="10"
-                android:hint="Full Name"
-                android:inputType="textEmailAddress" />
-
-            <EditText
-                android:id="@+id/eT_lab_no2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:ems="10"
-                android:hint="Lab No."
-                android:inputType="number" />
-
-    <EditText
-        android:id="@+id/eT_passwd2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_submit2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="#5C00FD"
-        app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
+                android:gravity="center_horizontal"
+                android:text="Not a sub-admin."
+                android:layout_gravity="center_horizontal"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:layout_marginTop="100dp"/>
+                <Button
+                    android:id="@+id/btn_submit2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Sign Up" />
         </LinearLayout>
-    </ScrollView>
+</ScrollView>
 </LinearLayout>
+
