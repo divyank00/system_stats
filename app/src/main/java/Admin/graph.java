@@ -1,10 +1,22 @@
 package Admin;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.system_stats.R;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class graph extends AppCompatActivity {
 
@@ -13,21 +25,18 @@ public class graph extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
 
-//        LineChart lineChart;
+        LineChart lineChart;
 
-//        lineChart=findViewById(R.id.lineChart);
-//
-//        final ArrayList<String> xAxes=new ArrayList<>(Arrays.asList("2019-9-20 3:13:13", "2019-9-20 3:14:13", "2019-9-20 3:15:13",
-//        "2019-9-20 3:16:13", "2019-9-20 3:17:13", "2019-9-20 3:18:14",
-//                "2019-9-20 3:19:14", "2019-9-20 3:20:16", "2019-9-20 3:21:16",
-//                "2019-9-20 3:22:16"));
-//        final ArrayList<String> yAxes=new ArrayList<>(Arrays.asList("2.6542", "3.0948", "2.4905", "3.7311", "3.3191", "4.5125", "5.7827", "3.8885",
-//                "3.9115", "1.9625"));
-//        ArrayList<Entry> graph=new ArrayList<>();
-////        ArrayList<Entry> xAxes=new ArrayList<>();
-//
-////        for(int i=0;i<2;i++){
-//
+        lineChart=findViewById(R.id.lineChart);
+
+        final ArrayList<String> xAxes=new ArrayList<>(Arrays.asList("13", "14", "15",
+        "16", "17", "18",
+                "19", "20", "21",
+                "22"));
+        final ArrayList<String> yAxes=new ArrayList<>(Arrays.asList("2.6542", "3.0948", "2.4905", "3.7311", "3.3191", "4.5125", "5.7827", "3.8885",
+                "3.9115", "1.9625"));
+        ArrayList<Entry> graph=new ArrayList<>();
+
 //        final XAxis xAxis=lineChart.getXAxis();
 //        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 //        xAxis.setDrawGridLines(false);
@@ -42,21 +51,21 @@ public class graph extends AppCompatActivity {
 //                return null;
 //            }
 //        });
-//        for(int i=0;i<xAxes.size();i++){
-//            graph.add(new Entry(Float.parseFloat(xAxes.get(i)), Float.parseFloat(yAxes.get(i))));
-//        }
-//
-//
-//        ArrayList<ILineDataSet> lineDataSets=new ArrayList<>();
-//        LineDataSet lineDataSets1=new LineDataSet(graph,"CPU Usage");
-//        lineDataSets1.setDrawCircles(false);
-//        lineDataSets1.setColor(Color.BLUE);
-//
-//        lineDataSets.add(lineDataSets1);
-//        lineChart.setData(new LineData(lineDataSets));
-//
-//        lineChart.setVisibleXRangeMaximum(1000);
-//        lineChart.setVerticalScrollBarEnabled(true);
-//        lineChart.fitScreen();
+        for(int i=0;i<xAxes.size();i++){
+            graph.add(new Entry(Float.parseFloat(xAxes.get(i)), Float.parseFloat(yAxes.get(i))));
+        }
+
+
+        ArrayList<ILineDataSet> lineDataSets=new ArrayList<>();
+        LineDataSet lineDataSets1=new LineDataSet(graph,"CPU Usage");
+        lineDataSets1.setDrawCircles(false);
+        lineDataSets1.setColor(Color.BLUE);
+
+        lineDataSets.add(lineDataSets1);
+        lineChart.setData(new LineData(lineDataSets));
+
+        lineChart.setVisibleXRangeMaximum(1000);
+        lineChart.setVerticalScrollBarEnabled(true);
+        lineChart.fitScreen();
     }
 }
