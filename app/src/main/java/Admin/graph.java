@@ -13,8 +13,8 @@ public class graph extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
 
-//        LineChart lineChart;
-//
+        LineChart lineChart;
+
 //        lineChart=findViewById(R.id.lineChart);
 //
 //        final ArrayList<String> xAxes=new ArrayList<>(Arrays.asList("2019-9-20 3:13:13", "2019-9-20 3:14:13", "2019-9-20 3:15:13",
