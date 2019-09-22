@@ -13,7 +13,7 @@ public class graph extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
 
-        LineChart lineChart;
+//        LineChart lineChart;
 
 //        lineChart=findViewById(R.id.lineChart);
 //
