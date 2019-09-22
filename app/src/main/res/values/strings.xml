@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">system_stats</string>
+    <string name="app_name">System Stats</string>
     <string name="openDrawer">Open</string>
     <string name="closeDrawer">Close</string>
 

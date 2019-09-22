@@ -7,11 +7,10 @@
     tools:context="Admin.Admin"
     android:id="@+id/drawerLayout"
     android:orientation="vertical">
-
     <FrameLayout
         android:id="@+id/container_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
@@ -19,5 +18,5 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         app:menu="@menu/nav_bar"/>
-
+<!--</LinearLayout>-->
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +21,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,7 +36,8 @@ import Sub_Admin.Sub_Admin;
 
 public class LoginActivity extends Activity {
 
-    private EditText mail, passwd;
+    private TextInputEditText mail, passwd;
+    private TextInputLayout layout_mail,layout_password;
     private FloatingActionButton submit;
     private Button signup;
 
@@ -44,11 +48,9 @@ public class LoginActivity extends Activity {
     private CollectionReference Sub_Admins = db.collection("Sub_Admins");
     private CollectionReference requests = Admins.document("Sub-Admins").collection("Sub-Admins");
 
-//    private FirebaseAuth.AuthStateListener mAuthStateListener;
-
     private ProgressDialog loginProgress, mProgress;
 
-    private String loginmail, loginpass, name, lab_no, User_Id;
+    private String loginmail, loginpass, User_Id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +141,8 @@ public class LoginActivity extends Activity {
             passwd = findViewById(R.id.eT_passwd);
             submit = findViewById(R.id.btn_submit);
             signup=findViewById(R.id.btn_submit2);
+            layout_mail=findViewById(R.id.layout_mail);
+            layout_password=findViewById(R.id.layout_password);
 
             if (mail_intent != null && password_intent != null && toast_intent != null) {
                 mail.setText(mail_intent);
@@ -151,12 +155,14 @@ public class LoginActivity extends Activity {
             submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    layout_mail.setErrorEnabled(false);
+                    layout_password.setErrorEnabled(false);
                     loginmail = mail.getText().toString().trim();
                     loginpass = passwd.getText().toString().trim();
                     if (loginmail.isEmpty())
-                        mail.setError("Mandatory field.");
+                        layout_mail.setError("This field cannot be empty!");
                     if (loginpass.isEmpty())
-                        passwd.setError("Mandatory field.");
+                        layout_password.setError("Mandatory field!");
                     else if (!loginmail.isEmpty() && !loginpass.isEmpty()) {
                         loginProgress.setMessage("Logging in...");
                         loginProgress.setCanceledOnTouchOutside(false);

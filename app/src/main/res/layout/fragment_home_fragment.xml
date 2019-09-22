@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     tools:context="Admin.home_fragment">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rV_Admin"
         android:layout_width="match_parent"

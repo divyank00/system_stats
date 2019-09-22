@@ -23,6 +23,12 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url 'https://dl.bintray.com/spark/maven'
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -39,11 +45,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.2.0'
     implementation 'com.firebaseui:firebase-ui-firestore:6.0.2'
 
-    implementation 'com.google.firebase:firebase-core:17.2.0'
-    implementation 'com.google.firebase:firebase-messaging:20.0.0'
-    implementation 'com.pusher:push-notifications-android:1.4.3'
-
     implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'me.spark:submitbutton:1.0.1'
 
 }
 apply plugin: 'com.google.gms.google-services'

@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +14,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,7 +27,8 @@ import java.util.Map;
 
 public class Admin_signup extends AppCompatActivity {
 
-    private EditText mail, passwd;
+    private TextInputEditText mail, passwd;
+    private TextInputLayout lyt_mail,lyt_pass;
     private FloatingActionButton submit;
 
     private FirebaseAuth mAuth;
@@ -50,16 +52,20 @@ public class Admin_signup extends AppCompatActivity {
         mail = findViewById(R.id.eT_mail);
         passwd = findViewById(R.id.eT_passwd);
         submit = findViewById(R.id.btn_submit);
+        lyt_mail=findViewById(R.id.lyt_mail);
+        lyt_pass=findViewById(R.id.lyt_pass);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                lyt_mail.setErrorEnabled(false);
+                lyt_pass.setErrorEnabled(false);
                 loginmail = mail.getText().toString().trim();
                 loginpass = passwd.getText().toString().trim();
                 if (loginmail.isEmpty())
-                    mail.setError("Mandatory field.");
+                    lyt_mail.setError("This field cannot be empty!");
                 if (loginpass.isEmpty())
-                    passwd.setError("Mandatory field.");
+                    lyt_pass.setError("This field cannot be empty!");
                 else if (!loginmail.isEmpty() && !loginpass.isEmpty()) {
                     loginProgress.setMessage("Signing Up...");
                     loginProgress.setCanceledOnTouchOutside(false);

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.system_stats.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LabItemAdapter extends RecyclerView.Adapter<LabItemAdapter.ViewHolder> {
@@ -38,6 +39,11 @@ public class LabItemAdapter extends RecyclerView.Adapter<LabItemAdapter.ViewHold
     @Override
     public int getItemCount() {
         return model_classList.size();
+    }
+
+    public void filterList(List<sub_admin_Lab_model_class> filteredList){
+        model_classList=filteredList;
+        notifyDataSetChanged();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{

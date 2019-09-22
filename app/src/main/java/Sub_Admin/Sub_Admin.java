@@ -2,14 +2,18 @@ package Sub_Admin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,6 +49,10 @@ public class Sub_Admin extends AppCompatActivity {
 
     private ArrayList<sub_admin_Lab_model_class> model_classList = new ArrayList<>();
 
+    private EditText search;
+
+    private LabItemAdapter labItemAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +69,30 @@ public class Sub_Admin extends AppCompatActivity {
 
         setContentView(R.layout.activity_sub__admin);
         Toast.makeText(this, "Logged in as " + mUser.getEmail(), Toast.LENGTH_SHORT).show();
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         UId = mUser.getUid();
+
+        search = findViewById(R.id.search);
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+        });
 
         Sub_Admins
                 .document(UId)
@@ -93,7 +124,7 @@ public class Sub_Admin extends AppCompatActivity {
                                                     linearLayout.setOrientation(LinearLayoutManager.VERTICAL);
                                                     recyclerView.setLayoutManager(linearLayout);
 
-                                                    LabItemAdapter labItemAdapter = new LabItemAdapter(model_classList);
+                                                    labItemAdapter = new LabItemAdapter(model_classList);
                                                     labItemAdapter.notifyDataSetChanged();
 
                                                     recyclerView.setAdapter(labItemAdapter);
@@ -115,6 +146,15 @@ public class Sub_Admin extends AppCompatActivity {
                         }
                     }
                 });
+    }
+    private void filter(String text) {
+        ArrayList<sub_admin_Lab_model_class> fileredList = new ArrayList<>();
+        for (sub_admin_Lab_model_class item : model_classList) {
+            if (item.getPCno().toLowerCase().contains(text.toLowerCase())) {
+                fileredList.add(item);
+            }
+        }
+        labItemAdapter.filterList(fileredList);
     }
 
     @Override

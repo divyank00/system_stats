@@ -5,10 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    tools:context=".LoginActivity"
+    android:background="#352F2F">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 
         <LinearLayout
@@ -16,28 +18,36 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tV1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login as Admin/Sub-Admin."
-        android:layout_marginTop="20dp"
-        android:textStyle="bold"
-        android:textSize="30sp"
-        android:layout_marginStart="10dp"/>
-
-            <com.google.android.material.textfield.TextInputLayout
+            <TextView
+                android:id="@+id/tV1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
+                android:text="Login as Admin/Sub-Admin"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:textColor="#ffffff"
+                android:layout_marginStart="10dp" />
 
-                <EditText
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_mail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="#ffffff"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="10dp"
+                app:errorEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/eT_mail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="#ffffff"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="8dp"
+                    android:textColor="#ffffff"
                     android:layout_marginBottom="8dp"
                     android:ems="10"
                     android:hint="E-Mail"
@@ -45,52 +55,66 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                app:passwordToggleEnabled="true">
+                android:textColorHint="#ffffff"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="#ffffff"
+                android:layout_marginStart="10dp"
+                app:errorEnabled="true">
 
-    <EditText
-        android:id="@+id/eT_passwd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/eT_passwd"
+                    android:textColor="#ffffff"
+                    android:backgroundTint="#ffffff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:ems="10"
+                    android:hint="Password"
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="#5C00FD"
-        app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
+                android:id="@+id/btn_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="#5C00FD"
+                app:srcCompat="@drawable/ic_arrow_forward_black_24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="Not a sub-admin."
-                android:layout_gravity="center_horizontal"
+                android:textColor="#ffffff"
+                android:text="Not a sub-admin!"
+                android:layout_gravity="center"
                 android:textSize="25sp"
                 android:textStyle="bold"
-                android:layout_marginTop="100dp"/>
-                <Button
-                    android:id="@+id/btn_submit2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Sign Up" />
+                android:layout_marginTop="20dp"/>
+
+            <Button
+                android:id="@+id/btn_submit2"
+                android:background="@drawable/button_background"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="#5C00FD"
+                android:text="Sign Up"
+                android:layout_marginTop="15dp"
+                android:textSize="18dp"
+                android:textColor="#ffffff"/>
         </LinearLayout>
-</ScrollView>
+    </ScrollView>
 </LinearLayout>
 

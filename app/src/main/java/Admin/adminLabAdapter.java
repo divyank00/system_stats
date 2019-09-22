@@ -1,11 +1,15 @@
 package Admin;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.system_stats.R;
@@ -41,10 +45,12 @@ public class adminLabAdapter extends RecyclerView.Adapter<adminLabAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder{
         private TextView labNo;
+        private LinearLayout linearLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             labNo=itemView.findViewById(R.id.LabNo);
+            linearLayout=itemView.findViewById(R.id.LL);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

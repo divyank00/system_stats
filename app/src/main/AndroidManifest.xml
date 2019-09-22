@@ -11,13 +11,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".signup_sub_admin"
-            android:theme="@style/NoTheme"/>
-        <activity android:name="Admin.Admin_Lab" />
-        <activity android:name="PC_info.PC_info" />
+        <activity android:name="Admin.graph"></activity>
+        <activity
+            android:name=".signup_sub_admin"
+            android:theme="@style/NoTheme" />
+        <activity
+            android:name="Admin.Admin_Lab"
+            android:theme="@style/NoTheme" />
+        <activity
+            android:name="PC_info.PC_info"
+            android:theme="@style/NoTheme" />
         <activity android:name=".Admin_signup" />
         <activity android:name="Admin.Admin" />
-        <activity android:name="Sub_Admin.Sub_Admin" />
+        <activity
+            android:name="Sub_Admin.Sub_Admin"
+            android:theme="@style/NoTheme" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,8 +34,8 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

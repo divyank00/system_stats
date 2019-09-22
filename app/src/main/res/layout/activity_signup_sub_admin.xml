@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".signup_sub_admin"
+    android:background="#352F2F"
     android:orientation="vertical">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -13,11 +14,9 @@
         android:minHeight="?attr/actionBarSize"
         app:titleTextColor="#ffffff"
         android:theme="@style/ToolbarTheme"
-        android:background="#212121"
+        android:background="#5C00FD"
         android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="vertical"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -30,19 +29,25 @@
         android:layout_height="wrap_content">
     <TextView
         android:id="@+id/tV2"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign Up as Sub-Admin."
-        android:layout_marginTop="20dp"
+        android:text="Sign Up as Sub-Admin"
+        android:layout_marginTop="15dp"
         android:textStyle="bold"
+        android:textColor="#ffffff"
         android:textSize="30sp"
         android:layout_marginStart="10dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lyt_mail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
-        <EditText
+        android:layout_marginTop="25dp"
+        android:textColorHint="#ffffff"
+        app:errorEnabled="true"
+        android:layout_marginStart="10dp">
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/eT_mail2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,21 +56,29 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:ems="10"
+            android:textColor="#ffffff"
+            android:backgroundTint="#ffffff"
             android:hint="E-Mail"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lyt_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
-        <EditText
+        android:textColorHint="#ffffff"
+        android:layout_marginTop="20dp"
+        app:errorEnabled="true"
+        android:layout_marginStart="10dp">
+        <com.google.android.material.textfield.TextInputEditText
 
             android:id="@+id/eT_name2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:textColor="#ffffff"
+            android:backgroundTint="#ffffff"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:ems="10"
@@ -74,33 +87,46 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lyt_lab"
+        app:errorEnabled="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:textColorHint="#ffffff"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/eT_lab_no2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
+            android:textColor="#ffffff"
+            android:backgroundTint="#ffffff"
             android:layout_marginBottom="8dp"
             android:ems="10"
-            android:hint="Lab No."
+            android:hint="Lab No. Allocated"
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lyt_pass"
+        app:errorEnabled="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        app:passwordToggleEnabled="true">
+        android:textColorHint="#ffffff"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="#ffffff"
+        android:layout_marginStart="10dp">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/eT_passwd2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:backgroundTint="#ffffff"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
