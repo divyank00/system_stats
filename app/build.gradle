@@ -25,8 +25,9 @@ android {
 
 repositories {
     maven {
-        url 'https://dl.bintray.com/spark/maven'
+        url 'https://jitpack.io'
     }
+    maven { url 'https://dl.bintray.com/spark/maven' }
 }
 
 dependencies {
@@ -48,6 +49,9 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation 'me.spark:submitbutton:1.0.1'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+
 
 }
 apply plugin: 'com.google.gms.google-services'
