@@ -1,10 +1,13 @@
 package PC_info;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,8 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.system_stats.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -24,14 +29,17 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.spark.submitbutton.SubmitButton;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
 public class PC_info extends AppCompatActivity {
     private TextView total, used, available, cpu_brand, cpu_mnf, cpu_spd, cpu_usage, mnf_brand, mnf_model, platorm, uptime, status,idle;
-    private Button sleep,shutdown,hibernate;
+    private Button sleep, shutdown, hibernate, req_ss;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
+
+    private ImageView ss;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -42,6 +50,12 @@ public class PC_info extends AppCompatActivity {
 
     private SubmitButton shutdown2;
 
+    private String path;
+
+    private ProgressDialog mProgress;
+
+    private ScrollView sV;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,12 +64,14 @@ public class PC_info extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUser = mAuth.getCurrentUser();
 
+        mProgress = new ProgressDialog(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Info");
 
+        sV = findViewById(R.id.scrollView);
         total = findViewById(R.id.tV2);
         available = findViewById(R.id.tV4);
         used = findViewById(R.id.tV6);
@@ -73,6 +89,8 @@ public class PC_info extends AppCompatActivity {
         shutdown=findViewById(R.id.register);
         shutdown2 = findViewById(R.id.register1);
         hibernate=findViewById(R.id.hibernate);
+        req_ss = findViewById(R.id.req_ss);
+        ss = findViewById(R.id.ss);
 
         Intent intentThatStartedThisActivtiy = getIntent();
         final String PC = intentThatStartedThisActivtiy.getStringExtra("PCno");
@@ -194,6 +212,57 @@ public class PC_info extends AppCompatActivity {
             }
         });
 
+        req_ss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String active = (String) status.getText();
+                if (active.equals("PC is active!")) {
+                    mProgress.setMessage("Processing...");
+                    mProgress.setCanceledOnTouchOutside(false);
+                    mProgress.show();
+                    pc.get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(final DocumentSnapshot documentSnapshot) {
+                                    Boolean req = documentSnapshot.getBoolean("screenshot");
+
+                                    if (req == Boolean.FALSE) {
+                                        pc.update("screenshot", Boolean.TRUE).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    path = (String) documentSnapshot.get("path");
+                                                    if(path!=null)
+                                                        Picasso.get().load(path).into(ss);
+                                                    mProgress.dismiss();
+                                                    sV.post(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            sV.fullScroll(View.FOCUS_DOWN);
+                                                        }
+                                                    });
+                                                } else {
+                                                    Toast.makeText(PC_info.this, (CharSequence) task.getException(), Toast.LENGTH_SHORT).show();
+                                                    mProgress.dismiss();
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        Toast.makeText(PC_info.this, "Please wait! Processing...", Toast.LENGTH_SHORT).show();
+                                        mProgress.dismiss();
+                                    }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(PC_info.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else
+                    Toast.makeText(PC_info.this, "PC in inactive. Cant capture screenshot.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private Runnable runnable = new Runnable() {
@@ -256,6 +325,7 @@ public class PC_info extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        pc.update("path",null);
         handler.removeCallbacks(runnable);
         super.onPause();
     }
