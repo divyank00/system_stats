@@ -1,13 +1,11 @@
 package PC_info;
 
-import android.app.ProgressDialog;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,24 +20,20 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.spark.submitbutton.SubmitButton;
-import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
-
-import uk.co.senab.photoview.PhotoViewAttacher;
+import java.util.Objects;
 
 public class PC_info extends AppCompatActivity {
     private TextView total, used, available, cpu_brand, cpu_mnf, cpu_spd, cpu_usage, mnf_brand, mnf_model, platorm, uptime, status,idle;
     private Button sleep, shutdown, hibernate, req_ss;
     private FirebaseAuth mAuth;
-    private FirebaseUser mUser;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -50,28 +44,20 @@ public class PC_info extends AppCompatActivity {
 
     private SubmitButton shutdown2;
 
-    private String path;
-
-    private ProgressDialog mProgress;
-
-    private ScrollView sV;
-
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pc_info);
 
         mAuth = FirebaseAuth.getInstance();
-        mUser = mAuth.getCurrentUser();
 
-        mProgress = new ProgressDialog(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("Info");
 
-        sV = findViewById(R.id.scrollView);
         total = findViewById(R.id.tV2);
         available = findViewById(R.id.tV4);
         used = findViewById(R.id.tV6);
@@ -91,9 +77,9 @@ public class PC_info extends AppCompatActivity {
         hibernate=findViewById(R.id.hibernate);
         req_ss = findViewById(R.id.req_ss);
 
-        Intent intentThatStartedThisActivtiy = getIntent();
-        final String PC = intentThatStartedThisActivtiy.getStringExtra("PCno");
-        String Lab = intentThatStartedThisActivtiy.getStringExtra("Labno");
+        Intent intentThatStartedThisActivity = getIntent();
+        final String PC = intentThatStartedThisActivity.getStringExtra("PCno");
+        final String Lab = intentThatStartedThisActivity.getStringExtra("Labno");
         assert Lab != null;
         Toast.makeText(this, Lab.toUpperCase() + ":  " + PC, Toast.LENGTH_SHORT).show();
 
@@ -105,6 +91,7 @@ public class PC_info extends AppCompatActivity {
         runnable.run();
 
         pc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null)
@@ -115,61 +102,28 @@ public class PC_info extends AppCompatActivity {
                         available.setText((String) documentSnapshot.get("Available_memory"));
                         used.setText((String) documentSnapshot.get("Used_memory"));
                         cpu_brand.setText((String) documentSnapshot.get("cpu_brand"));
-                        cpu_spd.setText((String) documentSnapshot.get("cpu_speed")+" GHz");
-                        cpu_usage.setText(String.valueOf(documentSnapshot.get("cpu_usage"))+"%");
+                        cpu_spd.setText(documentSnapshot.get("cpu_speed")+" GHz");
+                        cpu_usage.setText((documentSnapshot.get("cpu_usage"))+"%");
                         cpu_mnf.setText((String) documentSnapshot.get("cpu_mnf"));
                         mnf_brand.setText((String) documentSnapshot.get("cpu_brand"));
 //                        mnf_model.setText((String) documentSnapshot.get("mnf_model"));
 //                        platorm.setText((String) documentSnapshot.get("platform"));
-                        int hours = (Integer.valueOf((String) documentSnapshot.get("upTime"))) / 3600;
-                        int minutes = (Integer.valueOf((String) documentSnapshot.get("upTime")) % 3600) / 60;
-                        int seconds = Integer.valueOf((String) documentSnapshot.get("upTime")) % 60;
+                        int hours = (Integer.valueOf((String) Objects.requireNonNull(documentSnapshot.get("upTime")))) / 3600;
+                        int minutes = (Integer.valueOf((String) Objects.requireNonNull(documentSnapshot.get("upTime"))) % 3600) / 60;
+                        int seconds = Integer.valueOf((String) Objects.requireNonNull(documentSnapshot.get("upTime"))) % 60;
 //                        uptime.setText(String.valueOf(documentSnapshot.get("upTime"))+" seconds");
                         uptime.setText(hours+"Hr "+minutes+"min "+seconds+"sec");
                         String s1= (String) documentSnapshot.get("mouseMovement");
-                        if(s1.equals("idle"))
-                            idle.setText("True");
-                        else
-                            idle.setText("False");
+                        if (s1 != null) {
+                            if(s1.equals("idle"))
+                                idle.setText("True");
+                            else
+                                idle.setText("False");
+                        }
                     }
                 }
             }
         });
-//        pc.get()
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        final String path= (String) documentSnapshot.get("path");
-//                        PhotoViewAttacher photoViewAttacher;
-//                        if(path!=null){
-//                            Picasso.get().load(path).into(ss);
-//                            photoViewAttacher = new PhotoViewAttacher(ss);
-//                            photoViewAttacher.setZoomable(false);
-//                            photoViewAttacher.setScale(2);
-//                            sV.post(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    sV.fullScroll(View.FOCUS_DOWN);
-//                                }
-//                            });
-//                            photoViewAttacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
-//                                @Override
-//                                public void onViewTap(View view, float x, float y) {
-//                                    Intent intent = new Intent(PC_info.this, ss.class);
-//                                    intent.putExtra("path", path);
-//                                    startActivity(intent);
-//                                }
-//                            });
-//                        }
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(PC_info.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-
         shutdown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -250,60 +204,25 @@ public class PC_info extends AppCompatActivity {
             public void onClick(View view) {
                 String active = (String) status.getText();
                 if (active.equals("PC is active!")) {
-                    mProgress.setMessage("Processing...");
-                    mProgress.setCanceledOnTouchOutside(false);
-                    mProgress.show();
                     pc.get()
                             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(final DocumentSnapshot documentSnapshot) {
                                     Boolean req = documentSnapshot.getBoolean("screenshot");
-
                                     if (req == Boolean.FALSE) {
                                         pc.update("screenshot", Boolean.TRUE).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    Handler handler1 = new Handler();
-                                                    handler1.postDelayed(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            path = (String) documentSnapshot.get("path");
-                                                            pc.update("path", null);
-                                                            mProgress.dismiss();
                                                             Intent intent = new Intent(PC_info.this, ss.class);
-                                                            intent.putExtra("path", path);
+                                                            intent.putExtra("pc", PC);
+                                                            intent.putExtra("lab",Lab);
                                                             startActivity(intent);
-//                                                            PhotoViewAttacher photoViewAttacher;
-//                                                            if (path != null && !path.equals("")) {
-//                                                                Picasso.get().load(path).into(ss);
-//                                                                photoViewAttacher = new PhotoViewAttacher(ss);
-//                                                                photoViewAttacher.setZoomable(true);
-////                                                        photoViewAttacher.setScale(2);
-//                                                                photoViewAttacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
-//                                                                    @Override
-//                                                                    public void onViewTap(View view, float x, float y) {
-//
-//                                                                    }
-//                                                                });
-//                                                            }
-                                                        }
-                                                    }, 5000);
-//                                                    sV.post(new Runnable() {
-//                                                        @Override
-//                                                        public void run() {
-//                                                            sV.fullScroll(View.FOCUS_DOWN);
-//                                                        }
-//                                                    });
                                                 } else {
                                                     Toast.makeText(PC_info.this, (CharSequence) task.getException(), Toast.LENGTH_SHORT).show();
-                                                    mProgress.dismiss();
                                                 }
                                             }
                                         });
-                                    } else {
-                                        Toast.makeText(PC_info.this, "Please wait! Processing...", Toast.LENGTH_SHORT).show();
-                                        mProgress.dismiss();
                                     }
                                 }
                             })
@@ -326,9 +245,10 @@ public class PC_info extends AppCompatActivity {
             Calendar cal = Calendar.getInstance();
             final String crntHr = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
             final String crntMin = String.valueOf(cal.get(Calendar.MINUTE));
-            String crntSec = String.valueOf(cal.get(Calendar.SECOND));
+//            String crntSec = String.valueOf(cal.get(Calendar.SECOND));
             pc.get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @SuppressLint("SetTextI18n")
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             String sysTime = (String) documentSnapshot.get("sysTime");
@@ -378,7 +298,6 @@ public class PC_info extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        pc.update("path",null);
         handler.removeCallbacks(runnable);
         super.onPause();
     }
