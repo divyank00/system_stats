@@ -72,7 +72,6 @@ public class ss extends AppCompatActivity{
                                     Picasso.get().load(path).into(ss_full);
                                     photoViewAttacher = new PhotoViewAttacher(ss_full);
                                     photoViewAttacher.setZoomable(true);
-//                            photoViewAttacher.setScale(2);
                                 }
                             }
                         })
@@ -84,8 +83,6 @@ public class ss extends AppCompatActivity{
                         });
                 if(mProgress.isShowing())
                     mProgress.dismiss();
-
-//                Toast.makeText(ss.this, "Runnning", Toast.LENGTH_SHORT).show();
             }
         }, 2000);
     }
