@@ -120,7 +120,8 @@ public class Admin_Lab extends AppCompatActivity {
                 fileredList.add(item);
             }
         }
-        labItemAdapter.filterList(fileredList);
+        if (!fileredList.isEmpty())
+            labItemAdapter.filterList(fileredList);
     }
 
     public void showMessage(String title, String message) {

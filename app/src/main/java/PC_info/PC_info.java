@@ -33,13 +33,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 public class PC_info extends AppCompatActivity {
     private TextView total, used, available, cpu_brand, cpu_mnf, cpu_spd, cpu_usage, mnf_brand, mnf_model, platorm, uptime, status,idle;
     private Button sleep, shutdown, hibernate, req_ss;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
-
-    private ImageView ss;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -90,7 +90,6 @@ public class PC_info extends AppCompatActivity {
         shutdown2 = findViewById(R.id.register1);
         hibernate=findViewById(R.id.hibernate);
         req_ss = findViewById(R.id.req_ss);
-        ss = findViewById(R.id.ss);
 
         Intent intentThatStartedThisActivtiy = getIntent();
         final String PC = intentThatStartedThisActivtiy.getStringExtra("PCno");
@@ -136,6 +135,40 @@ public class PC_info extends AppCompatActivity {
                 }
             }
         });
+//        pc.get()
+//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                        final String path= (String) documentSnapshot.get("path");
+//                        PhotoViewAttacher photoViewAttacher;
+//                        if(path!=null){
+//                            Picasso.get().load(path).into(ss);
+//                            photoViewAttacher = new PhotoViewAttacher(ss);
+//                            photoViewAttacher.setZoomable(false);
+//                            photoViewAttacher.setScale(2);
+//                            sV.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    sV.fullScroll(View.FOCUS_DOWN);
+//                                }
+//                            });
+//                            photoViewAttacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
+//                                @Override
+//                                public void onViewTap(View view, float x, float y) {
+//                                    Intent intent = new Intent(PC_info.this, ss.class);
+//                                    intent.putExtra("path", path);
+//                                    startActivity(intent);
+//                                }
+//                            });
+//                        }
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Toast.makeText(PC_info.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
         shutdown.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,16 +264,37 @@ public class PC_info extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
-                                                    path = (String) documentSnapshot.get("path");
-                                                    if(path!=null)
-                                                        Picasso.get().load(path).into(ss);
-                                                    mProgress.dismiss();
-                                                    sV.post(new Runnable() {
+                                                    Handler handler1 = new Handler();
+                                                    handler1.postDelayed(new Runnable() {
                                                         @Override
                                                         public void run() {
-                                                            sV.fullScroll(View.FOCUS_DOWN);
+                                                            path = (String) documentSnapshot.get("path");
+                                                            pc.update("path", null);
+                                                            mProgress.dismiss();
+                                                            Intent intent = new Intent(PC_info.this, ss.class);
+                                                            intent.putExtra("path", path);
+                                                            startActivity(intent);
+//                                                            PhotoViewAttacher photoViewAttacher;
+//                                                            if (path != null && !path.equals("")) {
+//                                                                Picasso.get().load(path).into(ss);
+//                                                                photoViewAttacher = new PhotoViewAttacher(ss);
+//                                                                photoViewAttacher.setZoomable(true);
+////                                                        photoViewAttacher.setScale(2);
+//                                                                photoViewAttacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
+//                                                                    @Override
+//                                                                    public void onViewTap(View view, float x, float y) {
+//
+//                                                                    }
+//                                                                });
+//                                                            }
                                                         }
-                                                    });
+                                                    }, 5000);
+//                                                    sV.post(new Runnable() {
+//                                                        @Override
+//                                                        public void run() {
+//                                                            sV.fullScroll(View.FOCUS_DOWN);
+//                                                        }
+//                                                    });
                                                 } else {
                                                     Toast.makeText(PC_info.this, (CharSequence) task.getException(), Toast.LENGTH_SHORT).show();
                                                     mProgress.dismiss();
@@ -289,29 +343,28 @@ public class PC_info extends AppCompatActivity {
                                         status.setText("PC is inactive!");
                                         pc.update("Status", "PC is inactive!");
                                     }
-//                                    if (Math.abs(Integer.parseInt(crntMin) - Integer.parseInt(Time[1])) <= 1) {
-//                                        status.setText("PC is active!");
-//                                    } else {
-//                                        status.setText("PC is inactive!");
-//                                    }
-//                                } else if (Math.abs(Integer.valueOf(crntHr) - Integer.valueOf(Time[0])) == 1) {
-//                                    if (Math.abs(Integer.parseInt(crntMin) - Integer.parseInt(Time[1])) <= 60 && Math.abs(Integer.parseInt(crntMin) + Integer.parseInt(Time[1])) >= 59) {
-//                                        status.setText("PC is active!");
-//                                    } else if (Math.abs(Integer.parseInt(crntMin) - Integer.parseInt(Time[1])) >= 0 && Math.abs(Integer.parseInt(crntMin) - Integer.parseInt(Time[1])) <= 1) {
-//                                        status.setText("PC is active!");
-//                                    } else {
-//                                        status.setText("PC is inactive!");
-//                                    }
-//                                } else {
-//                                    status.setText("PC is inactive!");
-//                                }
+                                    if (Math.abs(Integer.parseInt(crntMin) - Integer.parseInt(Time[1])) <= 1) {
+                                        status.setText("PC is active!");
+                                    } else {
+                                        status.setText("PC is inactive!");
+                                    }
+                                } else if (Math.abs(Integer.valueOf(crntHr) - Integer.valueOf(Time[0])) == 1) {
+                                    if (Math.abs(Integer.parseInt(crntMin) - Integer.parseInt(Time[1])) <= 60 && Math.abs(Integer.parseInt(crntMin) + Integer.parseInt(Time[1])) >= 59) {
+                                        status.setText("PC is active!");
+                                    } else if (Math.abs(Integer.parseInt(crntMin) - Integer.parseInt(Time[1])) >= 0 && Math.abs(Integer.parseInt(crntMin) - Integer.parseInt(Time[1])) <= 1) {
+                                        status.setText("PC is active!");
+                                    } else {
+                                        status.setText("PC is inactive!");
+                                    }
+                                } else {
+                                    status.setText("PC is inactive!");
+                                }
 
                                 } else {
                                     status.setText("PC is inactive!");
                                     pc.update("Status", "PC is active!");
                                 }
                             }
-                        }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
