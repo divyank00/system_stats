@@ -37,6 +37,7 @@ public class home_fragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference lab = db.collection("LAB2");
+
     private CollectionReference Admins = db.collection("Admins");
     private CollectionReference Sub_Admins = db.collection("Sub_Admins");
 
@@ -89,7 +90,6 @@ public class home_fragment extends Fragment {
                 }
             }
         });
-
     }
 
     public void showMessage(String title, String message) {

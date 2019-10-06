@@ -1,17 +1,15 @@
 package PC_info;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Message;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.system_stats.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,9 +21,9 @@ import com.squareup.picasso.Picasso;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class ss extends AppCompatActivity{
+public class cam extends AppCompatActivity {
 
-    private ImageView ss_full;
+    private ImageView cam_full;
 
     private PhotoViewAttacher photoViewAttacher;
 
@@ -41,10 +39,9 @@ public class ss extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        setContentView(R.layout.activity_ss);
+        setContentView(R.layout.activity_cam);
 
-        ss_full=findViewById(R.id.ss_full);
+        cam_full=findViewById(R.id.cam_full);
 
         mProgress = new ProgressDialog(this);
         mProgress.setMessage("Processing...");
@@ -67,10 +64,10 @@ public class ss extends AppCompatActivity{
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                path = (String) documentSnapshot.get("path");
+                                path = (String) documentSnapshot.get("pathCam");
                                 if (path != null && !path.equals("")) {
-                                    Picasso.get().load(path).into(ss_full);
-                                    photoViewAttacher = new PhotoViewAttacher(ss_full);
+                                    Picasso.get().load(path).into(cam_full);
+                                    photoViewAttacher = new PhotoViewAttacher(cam_full);
                                     photoViewAttacher.setZoomable(true);
                                 }
                             }
@@ -78,13 +75,13 @@ public class ss extends AppCompatActivity{
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(ss.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(cam.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
                 if(mProgress.isShowing())
                     mProgress.dismiss();
             }
-        }, 5000);
+        }, 10000);
     }
 
     @Override

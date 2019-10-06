@@ -412,7 +412,10 @@
         android:layout_toRightOf="@id/hibernate"/>
 
 </RelativeLayout>
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
         <Button
             android:id="@+id/req_ss"
             android:layout_width="wrap_content"
@@ -421,6 +424,16 @@
             android:layout_marginBottom="30dp"
             android:text="Get Screenshot!" />
 
+        <Button
+            android:id="@+id/req_cam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="30dp"
+            android:text="Get Photo"
+            android:layout_toRightOf="@id/req_ss"
+            android:layout_marginStart="40dp"/>
+        </RelativeLayout>
     </LinearLayout>
 </ScrollView>
 </LinearLayout>

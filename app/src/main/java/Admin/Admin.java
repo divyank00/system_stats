@@ -1,7 +1,10 @@
 package Admin;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,9 +23,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.system_stats.LoginActivity;
 import com.example.system_stats.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import Admin.accepted.accepted_fragment;
 import Admin.pending.pending_fragment;

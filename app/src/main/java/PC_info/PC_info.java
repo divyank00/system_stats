@@ -32,7 +32,7 @@ import java.util.Objects;
 
 public class PC_info extends AppCompatActivity {
     private TextView total, used, available, cpu_brand, cpu_mnf, cpu_spd, cpu_usage, mnf_brand, mnf_model, platorm, uptime, status,idle;
-    private Button sleep, shutdown, hibernate, req_ss;
+    private Button sleep, shutdown, hibernate, req_ss,req_cam;
     private FirebaseAuth mAuth;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -76,6 +76,7 @@ public class PC_info extends AppCompatActivity {
         shutdown2 = findViewById(R.id.register1);
         hibernate=findViewById(R.id.hibernate);
         req_ss = findViewById(R.id.req_ss);
+        req_cam=findViewById(R.id.req_cam);
 
         Intent intentThatStartedThisActivity = getIntent();
         final String PC = intentThatStartedThisActivity.getStringExtra("PCno");
@@ -218,6 +219,44 @@ public class PC_info extends AppCompatActivity {
                                                             intent.putExtra("pc", PC);
                                                             intent.putExtra("lab",Lab);
                                                             startActivity(intent);
+                                                } else {
+                                                    Toast.makeText(PC_info.this, (CharSequence) task.getException(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(PC_info.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else
+                    Toast.makeText(PC_info.this, "PC in inactive. Cant capture screenshot.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        req_cam.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String active = (String) status.getText();
+                if (active.equals("PC is active!")) {
+                    pc.get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(final DocumentSnapshot documentSnapshot) {
+                                    Boolean req = documentSnapshot.getBoolean("cam");
+                                    if (req == Boolean.FALSE) {
+                                        pc.update("cam", Boolean.TRUE).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Intent intent = new Intent(PC_info.this, cam.class);
+                                                    intent.putExtra("pc", PC);
+                                                    intent.putExtra("lab",Lab);
+                                                    startActivity(intent);
                                                 } else {
                                                     Toast.makeText(PC_info.this, (CharSequence) task.getException(), Toast.LENGTH_SHORT).show();
                                                 }
