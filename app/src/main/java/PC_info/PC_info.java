@@ -128,29 +128,35 @@ public class PC_info extends AppCompatActivity {
         shutdown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                shutdown.setVisibility(View.GONE);
-                shutdown2.setVisibility(View.VISIBLE);
-                shutdown2.startAnimation();
-                pc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Boolean status1 = (Boolean) documentSnapshot.get("shutDown");
-                        if (status1 == Boolean.FALSE) {
-                            pc.update("shutDown", Boolean.TRUE);
-                            Toast.makeText(PC_info.this, PC + " is being shutting down.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(PC_info.this, "This operation can't take place!", Toast.LENGTH_SHORT).show();
-                            shutdown.setVisibility(View.VISIBLE);
-                            shutdown2.setVisibility(View.GONE);
+                String active = (String) status.getText();
+                if (active.equals("PC is active!")) {
+                    shutdown.setVisibility(View.GONE);
+                    shutdown2.setVisibility(View.VISIBLE);
+                    shutdown2.startAnimation();
+                    pc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Boolean status1 = (Boolean) documentSnapshot.get("shutDown");
+                            if (status1 == Boolean.FALSE) {
+                                pc.update("shutDown", Boolean.TRUE);
+                                Toast.makeText(PC_info.this, PC + " is being shutting down.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(PC_info.this, "This operation can't take place!", Toast.LENGTH_SHORT).show();
+                                shutdown.setVisibility(View.VISIBLE);
+                                shutdown2.setVisibility(View.GONE);
+                            }
                         }
-                    }
-                });
-
+                    });
+                }
+                else
+                    Toast.makeText(PC_info.this, "PC is inactive!", Toast.LENGTH_SHORT).show();
             }
         });
         sleep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String active = (String) status.getText();
+                if (active.equals("PC is active!")) {
                 pc.get()
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
@@ -171,12 +177,17 @@ public class PC_info extends AppCompatActivity {
                                 Toast.makeText(PC_info.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
+                }
+                else
+                    Toast.makeText(PC_info.this, "PC is inactive!", Toast.LENGTH_SHORT).show();
             }
         });
 
         hibernate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String active = (String) status.getText();
+                if (active.equals("PC is active!")) {
                 pc.get()
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
@@ -197,6 +208,9 @@ public class PC_info extends AppCompatActivity {
                                 Toast.makeText(PC_info.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
+            }
+                else
+                        Toast.makeText(PC_info.this, "PC is inactive!", Toast.LENGTH_SHORT).show();
             }
         });
 
